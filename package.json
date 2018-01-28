@@ -1,0 +1,27 @@
+{
+  "name": "cavalion-server",
+  "version": "0.4.4",
+  "description": "Cavalion (Development) Server",
+  "main": "index.js",
+  "dependencies": {
+    "file-system": "^2.2.2",
+    "md5": "^2.2.1",
+    "mime": "^2.2.0",
+    "mixin-object": "^3.0.0",
+    "restify": "^6.3.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/relluf/cavalion-server.git"
+  },
+  "author": "ralph",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/relluf/cavalion-server/issues"
+  },
+  "homepage": "https://github.com/relluf/cavalion-server#readme"
+}

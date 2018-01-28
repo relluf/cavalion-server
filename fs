@@ -1,0 +1,1 @@
+/Applications/Developer Tools/apache-tomcat-7.0.70/.navigator/
