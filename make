@@ -5,7 +5,7 @@ echo -- Running: npm install
 npm install
 
 cp src/restify/plugins/accept.js node_modules/restify/lib/plugins/accept.js 
-echo --- Patched restify: Client accepts everything (for serving less)
+echo --- Patched restify: Client accepts everything \(for serving less\)
 
 echo --- Creating links
 ln -s ~/Downloads static/fs/Downloads
