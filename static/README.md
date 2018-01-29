@@ -1,10 +1,10 @@
 # static folder
 
-When the [src/server.js](https://github.com/relluf/cavalion-server/blob/master/src/server.js) is running successfully, the following dynamic endpoints are available:
+When [src/server.js](https://github.com/relluf/cavalion-server/blob/master/src/server.js) is running successfully, the following dynamic endpoints are available:
 
 * [/fs](http://localhost:44710/fs) - simple API to a file system (dynamic)
 * [/code](http://localhost:44710/code) - application for editing code
-* [/shared](http://localhost:44710/shared) - shared stuff (to be refactored)
+* [/shared](http://localhost:44710/shared) - shared stuff (to be refactored);
 * [/home](http://localhost:44710/home) - link to /fs (static)
 
 These endpoints are mapped to the folders in this folder.
