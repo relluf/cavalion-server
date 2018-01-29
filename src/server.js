@@ -1,6 +1,7 @@
 var restify = require('restify');
 var fs = require('./endpoints/fs');
 
+
 const server = restify.createServer({
     name: 'cavalion-server',
     version: '1.0.0',
@@ -50,6 +51,10 @@ fs.useAt(server, {
 server.get(/\/home\/?.*/, restify.plugins.serveStatic({
 	directory: __dirname + "/../static",
 	'default': "index.html"
+}));
+
+server.get(/\/shared\/?.*/, restify.plugins.serveStatic({
+	directory: __dirname + "/../static"
 }));
 
 server.get(/\/code\/?.*/, restify.plugins.serveStatic({
