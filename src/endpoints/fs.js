@@ -3,6 +3,7 @@
 var restify = require('restify');
 var fs = require('fs');
 var filesystem = require('file-system');
+var rimraf = require('rimraf');
 var mime = require('mime');
 var mixin = require('mixin-object');
 var md5 = require('md5');
@@ -13,21 +14,27 @@ function salt(message) {
 	return md5(pre + message + post);
 }
 
+function handleError(res, err) {
+	console.error(err);
+	if (err.code === 'ENOENT' || err.code === 'ENOTDIR') {
+		res.send(404);
+	} else {
+		res.send(500, { reason: err.message });
+	}
+ }
+
 exports.useAt = function (server, opts) {
 	
 	opts = opts || {};
 
 	var base = opts.base || "fs";
-	var re = {
-		get: new RegExp("\\/" + base + "\\/?.*"),
-		put: new RegExp("\\/" + base + "\\/?.*")
-	};
-	
+	var re = new RegExp("\\/" + base + "\\/?.*");
+
 	server.get("/" + base + "/index", function(req, res, next) {
 		res.send(500);
 		next();
 	});
-    server.get(re.get, function(req, res, next) {
+    server.get(re, function(req, res, next) {
         var recursive = req.params.recursive; // create an index 
         var file = req.params.file; // suggest name for downloading the file
         var encoding = req.params.encoding || 'utf-8';
@@ -38,21 +45,12 @@ exports.useAt = function (server, opts) {
 		var fspath = opts.root + uri;
 		var list = uri.charAt(uri.length - 1) === '/'; // user expects list
 
-		function handleError(err) {
-			console.error(err);
-			if (err.code === 'ENOENT' || err.code === 'ENOTDIR') {
-				res.send(404);
-			} else {
-				res.send(500, { reason: err.message });
-			}
- 		}
- 		
 		fs.lstat(fspath, function(err, stats) {
-			if(err) return handleError(err);
+			if(err) return handleError(res, err);
 			
 			if(list || stats.isDirectory()) {
 				fs.readdir(fspath, {}, function(err, files) {
-					if(err) return handleError(err);
+					if(err) return handleError(res, err);
 					
 					var result = {};
 					files.forEach((name) => {
@@ -78,7 +76,9 @@ exports.useAt = function (server, opts) {
 				});
 			} else {
 				fs.readFile(fspath, { encoding: encoding }, function(err, data) {
-					if(err) return handleError(err);
+					// if(err) return res.send(403, { reason: err.message });
+					if(err) return handleError(res, err);
+					
 					res.send(200, {
 						text: data,
 						revision: salt(stats.mtime),
@@ -91,24 +91,15 @@ exports.useAt = function (server, opts) {
 		
     	next();
     });
-    server.put(re.put, function(req, res, next) {
+    server.put(re, function(req, res, next) {
 		var uri = req.path().substring(base);
 		var fspath = opts.root + uri;
 		if(typeof req.body !== "object") {
 			res.send(500, { reason: "Invalid request" });
 		}
 		
-		function handleError(err) {
-			console.error(err);
-			if (err.code === 'ENOENT' || err.code === 'ENOTDIR') {
-				res.send(404);
-			} else {
-				res.send(500, { reason: err.message });
-			}
- 		}
- 		
 		fs.lstat(fspath, function(err, stats) {
-			if(err) return handleError(err);
+			if(err) return handleError(res, err);
 			
 			var revision = salt(stats.mtime);
 			if(revision !== req.body.revision) {
@@ -120,10 +111,10 @@ exports.useAt = function (server, opts) {
 			}
 			
 			fs.writeFile(fspath, req.body.text, function(err) {
-				if(err) return handleError(err);
+				if(err) return handleError(res, err);
 				
 				fs.lstat(fspath, function(err, stats) {
-					if(err) return handleError(err);
+					if(err) return handleError(res, err);
 					
 					res.send(200, { size: stats.size, revision: salt(stats.mtime) });
 				});
@@ -132,11 +123,53 @@ exports.useAt = function (server, opts) {
 		
 		next();
     });
-    
-    //server.get("/")
-    
-    // server.get(/fs
-	
+    server.post(re, function(req, res, next) {
+		var uri = req.path().substring(base);
+		var fspath = opts.root + uri;
+		if(typeof req.body !== "object") {
+			res.send(500, { reason: "Invalid request" });
+		}
+		
+		fs.lstat(fspath, function(err, stats) {
+			if(!err) return res.send(406, "Already exists");
+
+			fs.writeFile(fspath, req.body.text, function(err) {
+				if(err) return handleError(res, err);
+				
+				fs.lstat(fspath, function(err, stats) {
+					if(err) return handleError(res, err);
+					
+					res.send(200, { size: stats.size, revision: salt(stats.mtime) });
+				});
+			});
+		});
+
+		next();
+    });
+    server.del(re, function(req, res, next) {
+		var uri = req.path().substring(base);
+		var fspath = opts.root + uri;
+
+		fs.lstat(fspath, function(err, stats) {
+			if(err) return handleError(res, err);
+			
+			if(stats.isDirectory()) {
+				rimraf(fspath, function(err) {
+					if(err) return handleError(res, err);
+
+					res.send(204);
+				});
+			} else {
+				fs.unlink(fspath, function(err) {
+					if(err) return handleError(res, err);
+					
+					res.send(204);
+				});
+			}
+		});
+		
+		next();
+    });
 };
 
 
