@@ -1,51 +1,11 @@
 var restify = require('restify');
 var fs = require('./endpoints/fs');
+var mime = require("mime");
 
-// var mime = require("mime");
-
-// (function override_mime_getType(inherited) {
-
-// 	mime.getType = function(type) {
-// 		console.log("getType", type);
-// 		return inherited.apply(this, args);
-// 	};
-	
-	
-// }(mime.getType));
 
 const server = restify.createServer({
     name: 'cavalion-server',
-    version: '1.0.0',
-    // accept: '*',
-    // formatters: {
-        'text/html': function(req, res, body) {
-            // body is whatever was passed to res.send() - in the case of html, it usually is already an 
-            // html string. In the case of errors, like your 404, you will get a NotFoundError here. you can
-            // choose to implement a toString() on your error object, and this formatter function would
-            // send back the html. you could alternatively check if body here is an error and do the 
-            // appropriate thing as well. 
-            console.log("BINGO!");
-            return body.toString();
-        },
-        'text/less': function(req, res, body) {
-            // body is whatever was passed to res.send() - in the case of html, it usually is already an 
-            // html string. In the case of errors, like your 404, you will get a NotFoundError here. you can
-            // choose to implement a toString() on your error object, and this formatter function would
-            // send back the html. you could alternatively check if body here is an error and do the 
-            // appropriate thing as well. 
-            console.log("BINGO less!");
-            return body.toString();
-        },
-        'text/*': function(req, res, body) {
-            // body is whatever was passed to res.send() - in the case of html, it usually is already an 
-            // html string. In the case of errors, like your 404, you will get a NotFoundError here. you can
-            // choose to implement a toString() on your error object, and this formatter function would
-            // send back the html. you could alternatively check if body here is an error and do the 
-            // appropriate thing as well. 
-            console.log("bingo!");
-            return body.toString();
-        }
-    // }
+    version: '1.0.0'
 });
 
 server.acceptable.push('text/less');
