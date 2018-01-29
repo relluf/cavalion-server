@@ -5,7 +5,7 @@ A [restify](http://restify.com/) based server with the following services and ap
 * [/code](https://github.com/cavalion-code) - All things code by Cavalion
 * /fs - CRUD interface to part of the file system
 
-## installation
+## Installation
 
 Perform the following command in your favorite shell:
 
