@@ -19,21 +19,20 @@ fs.useAt(server, {
 	root: __dirname + "/../static"
 });
 
+server.get(/\/home\/?.*/, restify.plugins.serveStatic({
+	directory: __dirname + "/../static",
+	'default': "index.html"
+}));
 
-// server.get(/\/home\/?.*/, restify.plugins.serveStatic({
-// 	directory: __dirname + "/../static",
-// 	'default': "index.html"
-// }));
+server.get(/\/shared\/?.*/, restify.plugins.serveStatic({
+	directory: __dirname + "/../static",
+	'default': "index.html"
+}));
 
-// server.get(/\/shared\/?.*/, restify.plugins.serveStatic({
-// 	directory: __dirname + "/../static",
-// 	'default': "index.html"
-// }));
-
-// server.get(/\/code\/?.*/, restify.plugins.serveStatic({
-// 	directory: __dirname + "/../static",
-// 	'default': "index.html"
-// }));
+server.get(/\/code\/?.*/, restify.plugins.serveStatic({
+	directory: __dirname + "/../static",
+	'default': "index.html"
+}));
 
 server.listen(44710, function () {
     console.log('%s listening at %s', server.name, server.url);
