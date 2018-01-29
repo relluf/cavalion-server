@@ -20,15 +20,14 @@ exports.useAt = function (server, opts) {
 	var base = opts.base || "fs";
 	var re = {
 		get: new RegExp("\\/" + base + "\\/?.*"),
+		put: new RegExp("\\/" + base + "\\/?.*")
 	};
 	
 	server.get("/" + base + "/index", function(req, res, next) {
 		res.send(500);
 		next();
 	});
-
     server.get(re.get, function(req, res, next) {
-    	
         var recursive = req.params.recursive; // create an index 
         var file = req.params.file; // suggest name for downloading the file
         var encoding = req.params.encoding || 'utf-8';
@@ -36,8 +35,8 @@ exports.useAt = function (server, opts) {
         var size = req.params.size; 
     	
 		var uri = req.path().substring(base);
-		var list = uri.charAt(uri.length - 1) === '/'; // user expects list
 		var fspath = opts.root + uri;
+		var list = uri.charAt(uri.length - 1) === '/'; // user expects list
 
 		function handleError(err) {
 			console.error(err);
@@ -88,11 +87,50 @@ exports.useAt = function (server, opts) {
 					});
 				});
 			}
-			
-			
 		});
 		
     	next();
+    });
+    server.put(re.put, function(req, res, next) {
+		var uri = req.path().substring(base);
+		var fspath = opts.root + uri;
+		if(typeof req.body !== "object") {
+			res.send(500, { reason: "Invalid request" });
+		}
+		
+		function handleError(err) {
+			console.error(err);
+			if (err.code === 'ENOENT' || err.code === 'ENOTDIR') {
+				res.send(404);
+			} else {
+				res.send(500, { reason: err.message });
+			}
+ 		}
+ 		
+		fs.lstat(fspath, function(err, stats) {
+			if(err) return handleError(err);
+			
+			var revision = salt(stats.mtime);
+			if(revision !== req.body.revision) {
+				
+				console.log('$revision !== $req.body.revision', revision, req.body.revision);
+				
+				res.send(409, { message: "Out of date, update working code" });
+				return;
+			}
+			
+			fs.writeFile(fspath, req.body.text, function(err) {
+				if(err) return handleError(err);
+				
+				fs.lstat(fspath, function(err, stats) {
+					if(err) return handleError(err);
+					
+					res.send(200, { size: stats.size, revision: salt(stats.mtime) });
+				});
+			});
+		});
+		
+		next();
     });
     
     //server.get("/")
