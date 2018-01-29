@@ -1,6 +1,6 @@
 {
   "name": "cavalion-server",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Cavalion (Development) Server",
   "main": "index.js",
   "dependencies": {
