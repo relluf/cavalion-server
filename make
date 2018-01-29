@@ -7,7 +7,7 @@ npm install
 cp src/restify/plugins/accept.js node_modules/restify/lib/plugins/accept.js 
 echo --- Patched restify: Client accepts everything \(for serving less\)
 
-echo --- Creating link in ./static/fs
+echo --- Linking file system folders in ./static/fs
 ln -s ~/Downloads static/fs/Downloads
 ln -s ~/Dropbox static/fs/Dropbox
 ln -s ~/Projects static/fs/Projects
