@@ -1,6 +1,17 @@
 var restify = require('restify');
 var fs = require('./endpoints/fs');
 
+// var mime = require("mime");
+
+// (function override_mime_getType(inherited) {
+
+// 	mime.getType = function(type) {
+// 		console.log("getType", type);
+// 		return inherited.apply(this, args);
+// 	};
+	
+	
+// }(mime.getType));
 
 const server = restify.createServer({
     name: 'cavalion-server',
@@ -54,7 +65,8 @@ server.get(/\/home\/?.*/, restify.plugins.serveStatic({
 }));
 
 server.get(/\/shared\/?.*/, restify.plugins.serveStatic({
-	directory: __dirname + "/../static"
+	directory: __dirname + "/../static",
+	'default': "index.html"
 }));
 
 server.get(/\/code\/?.*/, restify.plugins.serveStatic({
