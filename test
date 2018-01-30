@@ -1,6 +1,0 @@
-mkdir static/fs/a
-mkdir static/fs/a/b
-mkdir static/fs/a/b/c
-mkdir static/fs/a/b/c/d
-mkdir static/fs/a/b/c/d/e
-mkdir static/fs/a/b/c/d/e/f
