@@ -4,11 +4,12 @@
   "description": "Cavalion (Development) Server",
   "main": "index.js",
   "dependencies": {
-    "cavalion-code": "^1.0.7",
+    "cavalion-code": "^1.0.9",
     "file-system": "^2.2.2",
     "md5": "^2.2.1",
     "mime": "^2.2.0",
     "mixin-object": "^3.0.0",
+    "recursive-readdir": "^2.2.1",
     "restify": "^6.3.4"
   },
   "devDependencies": {},

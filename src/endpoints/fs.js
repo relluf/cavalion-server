@@ -7,21 +7,21 @@ var rimraf = require('rimraf');
 var mime = require('mime');
 var mixin = require('mixin-object');
 var md5 = require('md5');
+var rr = require('recursive-readdir');
 
 function salt(message) {
 	var pre = "c4v4710n";
 	var post = "44700";
 	return md5(pre + message + post);
 }
-
-function handleError(res, err) {
+function handleError(res, err, next) {
 	console.error(err);
 	if (err.code === 'ENOENT' || err.code === 'ENOTDIR') {
 		res.send(404);
 	} else {
 		res.send(500, { reason: err.message });
 	}
- }
+}
 
 exports.useAt = function (server, opts) {
 	
@@ -30,11 +30,49 @@ exports.useAt = function (server, opts) {
 	var base = opts.base || "fs";
 	var re = new RegExp("\\/" + base + "\\/?.*");
 
-	server.get("/" + base + "/index", function(req, res, next) {
-		res.send(500);
-		next();
-	});
+	// server.get("/" + base + "?index", function(req, res, next) {
     server.get(re, function(req, res, next) {
+		
+		function index(req, res, next) {		
+			
+			if(typeof req.query.uris !== "string") {
+				res.send(406, "No uris");
+				return next();
+			}
+			
+			var uris = req.query.uris.split(";");
+			var result = {}, count = uris.length;
+			uris.forEach(function(uri) {
+				var fspath = opts.root + uri;
+				
+				console.log(">>>" + fspath + "...");
+				fs.lstat(fspath, function(err, stats) {
+					if(err) {
+						console.log(fspath, err);
+						result[fspath] = err.message;
+					} else if(!stats.isDirectory()) {
+						result[fspath] = [];
+					} else {
+						rr(fspath, function(err, files) {
+							//if(err) return handleError(res, err);
+							if(err) console.log(err);
+							
+							result[fspath] = err ? err.message : files;
+						});
+					}
+					if(--count === 0) {
+						res.send(200, result);
+					}
+				});
+			});
+		
+			next();
+		}
+
+    	if(req.query.hasOwnProperty("index")) {
+    		return index(req, res, next);
+    	}
+    	
         var recursive = req.params.recursive; // create an index 
         var file = req.params.file; // suggest name for downloading the file
         var encoding = req.params.encoding || 'utf-8';
@@ -173,54 +211,3 @@ exports.useAt = function (server, opts) {
 };
 
 
-            // fs.readdir(path, function (err, files) {
-            //     if (err) {
-            //         resError(101, err, res);
-            //     } else {
-
-            //         // Ensure ending slash on path
-            //         (path.slice(-1)!=="/") ? path = path + "/" : path = path;
-
-            //         var output = {},
-            //             output_dirs = {},
-            //             output_files = {},
-            //             current,
-            //             relpath,
-            //             link;
-
-            //         // Function to build item for output objects
-            //         var createItem = function (current, relpath, type, link) {
-            //             return {
-            //                 path: relpath.replace('//','/'),
-            //                 type: type,
-            //                 size: fs.lstatSync(current).size,
-            //                 atime: fs.lstatSync(current).atime.getTime(),
-            //                 mtime: fs.lstatSync(current).mtime.getTime(),
-            //                 link: link
-            //             };
-            //         };
-
-            //         // Sort alphabetically
-            //         files.sort();
-
-            //         // Loop through and create two objects
-            //         // 1. Directories
-            //         // 2. Files
-            //         for (var i=0, z=files.length-1; i<=z; i++) {
-            //             current = path + files[i];
-            //             relpath = current.replace(config.base,"");
-            //             (fs.lstatSync(current).isSymbolicLink()) ? link = true : link = false;
-            //             if (fs.lstatSync(current).isDirectory()) {
-            //                 output_dirs[files[i]] = createItem(current,relpath,"directory",link);
-            //             } else {
-            //                 output_files[files[i]] = createItem(current,relpath,"file",link);
-            //             }
-            //         }
-
-            //         // Merge so we end up with alphabetical directories, then files
-            //         output = merge(output_dirs,output_files);
-
-            //         // Send output
-            //         resSuccess(output, res);
-            //     }
-            // });
