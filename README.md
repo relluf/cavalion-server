@@ -1,9 +1,11 @@
 # cavalion-server
 
-A [restify](http://restify.com/) based server serving the following services and applications:
+A [restify](http://restify.com/) based server serving the following services, applications and resources:
 
 * [/code](https://github.com/cavalion-code) - Coding in the browser
 * /fs - CRUD interface to part of the file system
+* /home - /fs statically served (temporary hack)
+* /shared - some shared resources (to be refactored)
 
 ## Installation
 
