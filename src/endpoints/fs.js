@@ -8,6 +8,7 @@ var mime = require('mime');
 var mixin = require('mixin-object');
 var md5 = require('md5');
 var rr = require('recursive-readdir');
+var path = require('path');
 
 function salt(message) {
 	var pre = "c4v4710n";
@@ -30,12 +31,11 @@ exports.useAt = function (server, opts) {
 	var base = opts.base || "fs";
 	var re = new RegExp("\\/" + base + "\\/?.*");
 
-	// server.get("/" + base + "?index", function(req, res, next) {
     server.get(re, function(req, res, next) {
 		
 		function index(req, res, next) {		
 			
-			if(typeof req.query.uris !== "string") {
+			if(!req.query.uris) {
 				res.send(406, "No uris");
 				return next();
 			}
@@ -43,26 +43,45 @@ exports.useAt = function (server, opts) {
 			var uris = req.query.uris.split(";");
 			var result = {}, count = uris.length;
 			uris.forEach(function(uri) {
-				var fspath = opts.root + uri;
 				
-				console.log(">>>" + fspath + "...");
+				function dec() { if(--count === 0) { res.send(200, result); } }
+
+				var root = opts.root + "/" + base;	
+				var fspath = root + "/" + uri;
+				
 				fs.lstat(fspath, function(err, stats) {
 					if(err) {
-						console.log(fspath, err);
-						result[fspath] = err.message;
+						result[uri] = [{type: err.message, name: "."}];
+						dec();
+					} else if(stats.isSymbolicLink()) {
+						result[uri] = [{type: "symbolic-link", name: "."}];
+						dec();
 					} else if(!stats.isDirectory()) {
-						result[fspath] = [];
+						result[uri] = [{type: "no-directory", name: "."}];
+						dec();
 					} else {
-						rr(fspath, function(err, files) {
-							//if(err) return handleError(res, err);
-							if(err) console.log(err);
-							
-							result[fspath] = err ? err.message : files;
+						var all_stats = {};
+						function ignore(file, stats) {
+							// Track all files, so details can be reported later
+							all_stats[file] = stats;
+							return ["bower_components", "node_modules", ".svn", ".git", ".metadata", 
+									".DS_Store"].indexOf(path.basename(file)) !== -1;
+						}
+
+						/*- ignore helps to track all stats objects */
+						rr(fspath, [ignore], function(err, files) {
+							result[uri] = err ? err.message : 
+								files.map(_ => ({
+									type: all_stats[_].isDirectory() ? "Folder" : "File",
+									path: _.substring(root.length + uri.length + 2)
+									// name: _.substring(root.length + uri.length + 2).split("/").pop(),
+									// key: _.substring(root.length + uri.length + 2).split("/").pop(),
+									// name: _.substring(root.length + uri.length + 2)
+								}));
+							dec();
 						});
 					}
-					if(--count === 0) {
-						res.send(200, result);
-					}
+
 				});
 			});
 		
@@ -71,6 +90,16 @@ exports.useAt = function (server, opts) {
 
     	if(req.query.hasOwnProperty("index")) {
     		return index(req, res, next);
+    	}
+    	
+    	if(req.query.hasOwnProperty("text")) {
+    		// difference between serving, downloading and editing as text?
+    		//		* http://localhost:44710/fs/Workspaces/configs/tomcat.xml
+    		//		* http://localhost:44710/fs/Workspaces/configs/tomcat.xml?download&name=suggested_filename
+    		//		* http://localhost:44710/fs/Workspaces/configs/tomcat.xml?json
+    		//
+    		//	list directory
+    		//		* http://localhost:44710/fs/Workspaces/configs/
     	}
     	
         var recursive = req.params.recursive; // create an index 
@@ -209,5 +238,3 @@ exports.useAt = function (server, opts) {
 		next();
     });
 };
-
-

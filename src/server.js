@@ -7,24 +7,26 @@ const server = restify.createServer({
     version: '0.4.4'
 });
 
+var dirname = process.cwd();
+
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
-fs.useAt(server, { root: __dirname + "/.." });
+fs.useAt(server, { root: dirname });
 
 server.get(/\/code\/?.*/, restify.plugins.serveStatic({
-	directory: __dirname + "/../static",
+	directory: dirname + "/static",
 	'default': "index.html"
 }));
 
 server.get(/\/home\/?.*/, restify.plugins.serveStatic({
-	directory: __dirname + "/../static",
+	directory: dirname + "/static",
 	'default': "index.html"
 }));
 
 server.get(/\/shared\/?.*/, restify.plugins.serveStatic({
-	directory: __dirname + "/../static",
+	directory: dirname + "/static",
 	'default': "index.html"
 }));
 
