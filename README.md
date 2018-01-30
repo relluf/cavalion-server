@@ -2,7 +2,7 @@
 
 A [restify](http://restify.com/) based server serving the following services and applications:
 
-* [/code](https://github.com/cavalion-code) - All things code by Cavalion
+* [/code](https://github.com/cavalion-code) - Coding in the browser
 * /fs - CRUD interface to part of the file system
 
 ## Installation
