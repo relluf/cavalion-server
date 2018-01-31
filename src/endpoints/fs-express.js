@@ -56,12 +56,12 @@ exports.useAt = function (server, opts) {
 						result[uri] = [{type: "no-directory", name: "."}];
 						dec();
 					} else {
-						var all_stats = {};
+						var all_stats = {}, size = 0;
 						function ignore(file, stats) {
 							// Track all files, so details can be reported later
 							all_stats[file] = stats;
-							return ["bower_components", "node_modules", ".svn", ".git", ".metadata", 
-									".DS_Store"].indexOf(path.basename(file)) !== -1;
+							return (++size > 50 * 100) || stats.isSymbolicLink() || ["bower_components", "node_modules", 
+									".svn", ".git", ".metadata", ".DS_Store"].indexOf(path.basename(file)) !== -1;
 						}
 
 						/*- ignore helps to track all stats objects */
