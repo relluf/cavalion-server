@@ -1,5 +1,5 @@
 var restify = require('restify');
-var fs = require('./endpoints/fs');
+var fs = require('./endpoints/fs-restify');
 var mime = require("mime");
 
 const server = restify.createServer({
