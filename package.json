@@ -4,7 +4,8 @@
   "description": "Cavalion (Development) Server",
   "main": "index.js",
   "dependencies": {
-    "cavalion-code": "^1.0.9",
+    "cavalion-code": "^1.0.11",
+    "express": "^4.16.2",
     "file-system": "^2.2.2",
     "md5": "^2.2.1",
     "mime": "^2.2.0",
