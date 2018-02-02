@@ -51,13 +51,13 @@ exports.useAt = function (server, opts) {
 				
 				fs.lstat(fspath, function(err, stats) {
 					if(err) {
-						result[uri] = [{type: err.message, name: "."}];
+						// result[uri] = [{type: err.message, name: "."}];
 						dec();
 					} else if(stats.isSymbolicLink()) {
-						result[uri] = [{type: "symbolic-link", name: "."}];
+						// result[uri] = [{type: "symbolic-link", name: "."}];
 						dec();
 					} else if(!stats.isDirectory()) {
-						result[uri] = [{type: "no-directory", name: "."}];
+						// result[uri] = [{type: "no-directory", name: "."}];
 						dec();
 					} else {
 						var all_stats = {}, size = 0;

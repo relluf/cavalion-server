@@ -22,6 +22,18 @@ function handleError(res, err, next) {
 		res.status(500).send({ reason: err.message });
 	}
 }
+function ensureExists(path, mask, cb) {
+    if (typeof mask == 'function') { // allow the `mask` parameter to be optional
+        cb = mask;
+        mask = 511;//0777;
+    }
+    fs.mkdir(path, mask, function(err) {
+        if (err) {
+            if (err.code == 'EEXIST') cb(null); // ignore the error if the folder already exists
+            else cb(err); // something else went wrong
+        } else cb(null); // successfully created folder
+    });
+}
 
 exports.useAt = function (server, opts) {
 	
@@ -188,19 +200,23 @@ exports.useAt = function (server, opts) {
 		var uri = req.path.substring(base);
 		var fspath = opts.root + uri;
 		if(typeof req.body !== "object") {
-			res.status(500).send({ reason: "Invalid request" });
+			res.status(406).send({ reason: "Invalid request body" });
 		}
 		
 		fs.lstat(fspath, function(err, stats) {
 			if(!err) return res.status(406).send("Already exists");
-
-			fs.writeFile(fspath, req.body.text, function(err) {
-				if(err) return handleError(res, err);
-				
-				fs.lstat(fspath, function(err, stats) {
+			
+			ensureExists(path.dirname(fspath), function() {
+				fs.writeFile(fspath, req.body.text, function(err) {
 					if(err) return handleError(res, err);
 					
-					res.status(200).send({ size: stats.size, revision: salt(stats.mtime) });
+					fs.lstat(fspath, function(err, stats) {
+						if(err) return handleError(res, err);
+						
+						res.status(200).send({ 
+								size: stats.size, 
+								revision: salt(stats.mtime) });
+					});
 				});
 			});
 		});
