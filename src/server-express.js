@@ -8,7 +8,7 @@ var app = express();
 var dirname = process.cwd();
 var port = process.env.PORT || 44710;
 
-app.use(express.static(dirname + "/static", {}));
+app.use(express.static(dirname + "/static", { dotfiles:'allow' }));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
