@@ -9,6 +9,7 @@ var mixin = require('mixin-object');
 var md5 = require('md5');
 var rr = require('recursive-readdir');
 var path = require('path');
+var querystring = require("querystring");
 
 function salt(message) {
 	var pre = "c4v4710n";
@@ -108,7 +109,7 @@ exports.useAt = function (server, opts) {
         var position = req.params.position;
         var size = req.params.size; 
     	
-		var uri = req.path().substring(base);
+		var uri = querystring.unescape(req.path().substring(base));
 		var fspath = opts.root + uri;
 		var list = uri.charAt(uri.length - 1) === '/'; // user expects list
 
@@ -159,7 +160,7 @@ exports.useAt = function (server, opts) {
     	next();
     });
     server.put(re, function(req, res, next) {
-		var uri = req.path().substring(base);
+		var uri = querystring.unescape(req.path.substring(base));
 		var fspath = opts.root + uri;
 		if(typeof req.body !== "object") {
 			res.send(500, { reason: "Invalid request" });
@@ -191,7 +192,7 @@ exports.useAt = function (server, opts) {
 		next();
     });
     server.post(re, function(req, res, next) {
-		var uri = req.path().substring(base);
+		var uri = querystring.unescape(req.path.substring(base));
 		var fspath = opts.root + uri;
 		if(typeof req.body !== "object") {
 			res.send(500, { reason: "Invalid request" });
