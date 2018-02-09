@@ -66,7 +66,7 @@ exports.useAt = function (server, opts) {
 							// Track all files, so details can be reported later
 							all_stats[file] = stats;
 							return (++size > 50 * 100) || stats.isSymbolicLink() || ["bower_components", "node_modules", 
-									".svn", ".git", ".metadata", ".sencha", ".DS_Store"].indexOf(path.basename(file)) !== -1;
+									".svn", ".git", ".metadata", ".sencha", ".hoodie", ".DS_Store"].indexOf(path.basename(file)) !== -1;
 						}
 
 						/*- ignore helps to track all stats objects */

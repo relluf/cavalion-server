@@ -18,6 +18,7 @@ The /fs _folder_ is the root folder of a file system exposed through a simple AP
 - **Cmd+1-9** - Focus workspace 1-9, keeping pressing to switch focus between sidebar and editor
 - **Alt+Cmd+1-9** - Focus tab 1-9 in sidebar
 - **Escape** - Focus editor
+- **Shift+Alt+X** - Toggle console
 - **Ctrl+Escape** - Toggle console
 - **Ctrl+Alt+[]** - Select previous/next workspace
 - **Ctrl+Alt+Cmd+[]** - Move tab active workspace 

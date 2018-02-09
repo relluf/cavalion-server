@@ -1,6 +1,6 @@
 # cavalion-server
 
-A [restify](http://restify.com/) based server serving the following services, applications and resources:
+A [restify](http://restify.com/) and/or [express](http://expressjs.com) based server serving the following services, applications and resources:
 
 * [/code](https://github.com/cavalion-code) - Coding in the browser
 * /fs - CRUD interface to part of the file system
