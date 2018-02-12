@@ -9,7 +9,7 @@ A [restify](http://restify.com/) and/or [express](http://expressjs.com) based se
 
 ## Installation
 
-Perform the following command in your favorite shell:
+Perform the following commands in your favorite shell:
 
 	$ git clone https://github.com/relluf/cavalion-server.git
 	$ cd cavalion-server
