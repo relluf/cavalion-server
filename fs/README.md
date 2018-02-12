@@ -1,4 +1,4 @@
-![Cavalion Logo](/home/icon.png)
+![Cavalion Icon](/home/icon.png)
 
 # /fs folder
 
