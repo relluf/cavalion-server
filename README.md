@@ -13,7 +13,8 @@ Perform the following command in your favorite shell:
 
 	$ git clone https://github.com/relluf/cavalion-server.git
 	$ cd cavalion-server
-	$ ./make
-	$ node src/server
+	$ npm install
+	$ ./first-run
+	$ node src/server-express
 
 Now open [http://localhost:44710/code](http://localhost:44710/code/) in your favorite browser to start coding in the browser.

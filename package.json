@@ -1,10 +1,10 @@
 {
   "name": "cavalion-server",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Cavalion (Development) Server",
   "main": "index.js",
   "dependencies": {
-    "cavalion-code": "^1.0.18",
+    "cavalion-code": "^1.0.23",
     "express": "^4.16.2",
     "file-system": "^2.2.2",
     "md5": "^2.2.1",

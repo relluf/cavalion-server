@@ -1,9 +1,3 @@
-echo --- Running: npm update
-npm update
-
-echo --- Running: npm install
-npm install
-
 cp node_modules/cavalion-code/README.md ./fs
 cp src/restify/plugins/accept.js node_modules/restify/lib/plugins/accept.js 
 echo --- Patched restify/plugins/accept: Client accepts everything \(for serving less\)
