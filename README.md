@@ -2,7 +2,7 @@
 
 A [restify](http://restify.com/) and/or [express](http://expressjs.com) based server serving the following services, applications and resources:
 
-* [/code](https://github.com/cavalion-code) - Coding in the browser
+* [/code](https://github.com/relluf/cavalion-code) - Coding in the browser
 * /fs - CRUD interface to part of the file system
 * /home - /fs statically served (temporary hack)
 * /shared - some shared resources (to be refactored)
