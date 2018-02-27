@@ -1,0 +1,4 @@
+echo --- Building web app: /code
+cd node_modules/cavalion-code/src
+bower install
+npm install
