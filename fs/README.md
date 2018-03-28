@@ -24,6 +24,7 @@
 
 ## Editor
 - **Cmd+Shift+1-9** - Focus Editor Tab (TODO)
+- **Cmd+Shift+F** - Format Code (JS, XML)
 - **Cmd+S** - Save
 - **Cmd+R** - Reload/Revert
 - **Cmd+0** - Focus in Navigator
