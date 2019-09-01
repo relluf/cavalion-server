@@ -1,4 +1,4 @@
 echo --- Building web app: /code
 cd node_modules/cavalion-code/src
-bower install
+bower --allow-root install
 npm install
