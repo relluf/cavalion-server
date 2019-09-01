@@ -1,7 +1,7 @@
-npm install -g bower
-npm install -g requirejs
+sudo npm install -g bower
+sudo npm install -g requirejs
 
-alias bower='bower --allow-root'
+#alias bower='bower --allow-root'
 
 git clone https://github.com/relluf/cavalion-server.git
 cd cavalion-server
