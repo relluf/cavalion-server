@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Installs and runs cavalion-server in a Docker container",
   "scripts": {
-  	"start": "bash install",
+    "start": "bash install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ralph",
