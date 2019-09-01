@@ -9,5 +9,5 @@ services:
     volumes:
       - ./:/Users/ralph/Workspaces/cavalion.org/cavalion-server/docker-compose
     expose:
-      - "44710"
+      - "4410"
     command: "npm start"
