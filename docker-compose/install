@@ -14,4 +14,4 @@ cd lib/node_modules/veldoffice-js
 cd ../../..
 cd ../..
 
-PORT=44710 node src/server-express.js
+PORT=4410 node src/server-express.js
