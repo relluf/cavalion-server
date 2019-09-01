@@ -1,0 +1,17 @@
+npm install -g bower
+npm install -g requirejs
+
+git clone https://github.com/relluf/cavalion-server.git
+cd cavalion-server
+npm install
+./first-run
+
+cd node_modules/cavalion-code
+bash make
+cd lib/node_modules/veldoffice-js
+./make
+
+cd ../../..
+cd ../..
+
+PORT=44710 node src/server-express.js
