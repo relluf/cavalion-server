@@ -1,5 +1,5 @@
-sudo npm install -g bower
-sudo npm install -g requirejs
+npm install -g bower
+npm install -g requirejs
 
 alias bower='bower --allow-root'
 
