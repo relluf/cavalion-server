@@ -2,12 +2,12 @@ version: "2"
 services:
   node:
     image: "node:8"
-    user: "node"
+    user: "root"
     working_dir: /Users/ralph/Workspaces/cavalion.org/cavalion-server/docker-compose
     environment:
       - NODE_ENV=production
     volumes:
-      - ./:/Users/ralph/Workspaces/cavalion.org/cavalion-server/fs
+      - ./:/Users/ralph/Workspaces/cavalion.org/cavalion-server/docker-compose
     expose:
       - "8081"
     command: "npm start"
