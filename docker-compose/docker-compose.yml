@@ -8,6 +8,8 @@ services:
       - NODE_ENV=production
     volumes:
       - ./:/Users/ralph/Workspaces/cavalion.org/cavalion-server/docker-compose
+    ports:
+      - "4410:4410"
     expose:
       - "4410"
     command: "npm start"
