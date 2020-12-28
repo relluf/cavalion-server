@@ -3,12 +3,17 @@ npm install -g bower
 
 echo '{ "allow_root": true }' > /root/.bowerrc
 
+git clone https://github.com/relluf/cavalion-code.git
 git clone https://github.com/relluf/cavalion-server.git
+
 cd cavalion-server
 npm install
 ./first-run
 
-cd node_modules/cavalion-code
+mv node_modules/cavalion-code node_modules/cavalion-code-dont
+ln -s ../../cavalion-code node_modules/cavalion-code
+
+cd ../cavalion-code
 bash make
 cd lib/node_modules/veldoffice-js
 ./make
@@ -16,4 +21,4 @@ cd lib/node_modules/veldoffice-js
 cd ../../..
 cd ../..
 
-PORT=4410 node src/server-express.js
+PORT=44710 node src/server-express.js
