@@ -11,6 +11,6 @@ if [ ! -L "$file" ]; then
 fi
 
 echo --- Building web app: /code
-cd node_modules/cavalion-code/src
+cd node_modules/cavalion-code/lib
 bower --allow-root install
 npm install
